@@ -5,12 +5,12 @@ $client = new RakutenRws_Client();
 // アプリID (デベロッパーID) をセットします
 
 $client->setApplicationId('');
-$client->setAffiliateId('')
+
 
 // 楽天市場商品検索API では operation として 'IchibaItemSearch' を指定してください。
 $response = $client->execute('IchibaItemSearch', array(
   'keyword' => 'シャンプー',
-  'NGKeyword' => 'メンズ 男性 犬 猫 ペット 動物',
+  'NGKeyword' => 'メンズ 男性 犬 猫 フェレット ペット 動物 詰め替え 詰替 訳あり つめかえ 詰換',
   'orFlag' => 1,
   'imageFlag' => 1
 ));
@@ -19,17 +19,22 @@ function getContent($item){
   //H1タグ(タイトル)を追加
   $content = "<H1>".$item['itemName']."</H1>";
 
+  //アフィリエイトURLを追加
+
+  foreach ($item['mediumImageUrls'] as $value) {
+    $content = $content.'<a href="'.$item['affiliateUrl'].'"><img src="'.$value['imageUrl'].'" alt="リンク"></a>"';
+
+
+//レビュー平均
+  $content=$content."<p>"."レビュー平均:".$item['reviewAverage']."</p>";
   //pタグ(説明)を追加
   $content = $content."<p>".$item['itemCaption']."</p>";
 
-  //アフィリエイトURLを追加
 
-  foreach ($item['smallImageUrls'] as $value) {
-    $content = $content.'<a href="'.$item['affiliateUrl'].'"><img src="'.$value['imageUrl'].'" alt="リンク"></a>"';
 
   }
 
-  }
+
 
   //本文をreturnで返す
   return $content;
@@ -64,7 +69,7 @@ if ($response->isOk()) {
         //ページ指定で再検索します
         $response = $client->execute('IchibaItemSearch', array(
             'keyword' => 'シャンプー',
-            'NGKeyword' => '男性 メンズ',
+            'NGKeyword' => 'メンズ 男性 犬 猫 フェレット ペット 動物 詰め替え 詰替 訳あり つめかえ 詰換',
             'orFlag' => 1,
             'page' => $i,
             'affiliateId' => '',
