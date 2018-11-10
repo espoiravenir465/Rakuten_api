@@ -3,7 +3,8 @@ require_once 'rws-php-sdk/autoload.php';
  
 $client = new RakutenRws_Client();
 // アプリID (デベロッパーID) をセットします
-$client->setApplicationId('');
+
+$client->setApplicationId('1022956975175696261');
  
 // 楽天市場商品検索API では operation として 'IchibaItemSearch' を指定してください。
 $response = $client->execute('IchibaItemSearch', array(
