@@ -9,7 +9,10 @@ $client->setAffiliateId('')
 
 // 楽天市場商品検索API では operation として 'IchibaItemSearch' を指定してください。
 $response = $client->execute('IchibaItemSearch', array(
-  'keyword' => 'シャンプー'
+  'keyword' => 'シャンプー',
+  'NGKeyword' => 'メンズ 男性 犬 猫 ペット 動物',
+  'orFlag' => 1,
+  'imageFlag' => 1
 ));
 
 function getContent($item){
@@ -18,6 +21,15 @@ function getContent($item){
 
   //pタグ(説明)を追加
   $content = $content."<p>".$item['itemCaption']."</p>";
+
+  //アフィリエイトURLを追加
+
+  foreach ($item['smallImageUrls'] as $value) {
+    $content = $content.'<a href="'.$item['affiliateUrl'].'"><img src="'.$value['imageUrl'].'" alt="リンク"></a>"';
+
+  }
+
+  }
 
   //本文をreturnで返す
   return $content;
@@ -52,7 +64,11 @@ if ($response->isOk()) {
         //ページ指定で再検索します
         $response = $client->execute('IchibaItemSearch', array(
             'keyword' => 'シャンプー',
-            'page' => $i
+            'NGKeyword' => '男性 メンズ',
+            'orFlag' => 1,
+            'page' => $i,
+            'affiliateId' => '',
+            'imageFlag' => 1
         ));
 
         // foreach で商品情報を順次取得することができます。
