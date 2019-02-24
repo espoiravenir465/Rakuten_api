@@ -28,11 +28,11 @@ if ($response->isOk()) {
     echo "testなので".$page."ページのみ検索します。\n";
  
     //ページの数だけループする
-    for ($i=0; $i<$page; $i++) {
+    for ($i=1; $i<$page; $i++) {
         //ページ指定で再検索します
         $response = $client->execute('IchibaItemSearch', array(
             'keyword' => 'シャンプー',
-            'page' => $page
+            'page' => $i
         ));
         
         // foreach で商品情報を順次取得することができます。
