@@ -28,7 +28,7 @@ if ($response->isOk()) {
     echo "testなので".$page."ページのみ検索します。\n";
  
     //ページの数だけループする
-    for ($i=1; $i<$page; $i++) {
+    for ($i=1; $i<=$page; $i++) {
         //ページ指定で再検索します
         $response = $client->execute('IchibaItemSearch', array(
             'keyword' => 'シャンプー',
