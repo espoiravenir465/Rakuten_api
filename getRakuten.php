@@ -23,6 +23,11 @@ if ($response->isOk()) {
     $page = ceil($count/30);
     echo $page."ページの情報があります。\n";
     
+    //最大100ページまでなので、それ以上の場合は100を設定
+    If($page>100){
+     $page = 100;
+    }
+    
     //testなのでページ数を制限する
     $page=2;
     echo "testなので".$page."ページのみ検索します。\n";
