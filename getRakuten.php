@@ -9,7 +9,17 @@ $client->setApplicationId('1004837992476132601');
 $response = $client->execute('IchibaItemSearch', array(
   'keyword' => 'シャンプー'
 ));
+
+function getContent($item){
  
+  //説明を追加
+  $content = $item['itemCaption'];
+ 
+  //本文をreturnで返す
+  return $content;
+}
+
+
 // レスポンスが正常かどうかを isOk() で確認することができます
 if ($response->isOk()) {
     // 配列アクセスで情報を取得することができます。
@@ -23,22 +33,30 @@ if ($response->isOk()) {
     $page = ceil($count/30);
     echo $page."ページの情報があります。\n";
     
+    //最大100ページまでなので、それ以上の場合は100を設定
+    if($page>100){
+    	echo "最大100ページまでなので、100ページに制限します。\n";
+	$page = 100;
+    }
+    
     //testなのでページ数を制限する
     $page=2;
     echo "testなので".$page."ページのみ検索します。\n";
  
     //ページの数だけループする
-    for ($i=0; $i<$page; $i++) {
+    for ($i=1; $i<=$page; $i++) {
         //ページ指定で再検索します
         $response = $client->execute('IchibaItemSearch', array(
             'keyword' => 'シャンプー',
-            'page' => $page
+            'page' => $i
         ));
         
         // foreach で商品情報を順次取得することができます。
         foreach ($response as $item) {
             // post_id
-            file_put_contents("sample.csv", ",",FILE_APPEND);
+            // really simple csv importerでは、投稿IDが一致する場合は重複登録されないが、数字限定なので数字に変換する
+            // 楽天APIのitemCodeは:以降が数字なので、:以降に編集する
+            file_put_contents("sample.csv", substr($item['itemCode'],strpos($item['itemCode'],":")+1).",",FILE_APPEND);
             // post_name
             file_put_contents("sample.csv", $item['itemName'].",",FILE_APPEND);
             // post_author
@@ -52,7 +70,7 @@ if ($response->isOk()) {
             // post_title
             file_put_contents("sample.csv", $item['itemName'].",",FILE_APPEND);
             // post_content
-            file_put_contents("sample.csv", $item['itemName'].",",FILE_APPEND);
+            file_put_contents("sample.csv", getContent($item).",",FILE_APPEND);
             // post_category
             file_put_contents("sample.csv", ",",FILE_APPEND);
             // post_tags
