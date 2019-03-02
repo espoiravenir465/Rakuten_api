@@ -11,9 +11,11 @@ $response = $client->execute('IchibaItemSearch', array(
 ));
 
 function getContent($item){
+  //H1タグ(タイトル)を追加
+  $content = "<H1>".$item['itemName']."</H1>";
  
-  //説明を追加
-  $content = $item['itemCaption'];
+  //pタグ(説明)を追加
+  $content = $content."<p>".$item['itemCaption']."</p>";
  
   //本文をreturnで返す
   return $content;
